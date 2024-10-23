@@ -2,6 +2,7 @@ package com.example.franchiseapi.controllers;
 
 import com.example.franchiseapi.models.Branch;
 import com.example.franchiseapi.models.Franchise;
+import com.example.franchiseapi.models.ProductStockResponse;
 import com.example.franchiseapi.repository.BranchRepository;
 import com.example.franchiseapi.repository.FranchiseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,4 +57,16 @@ public class BranchController {
         branchRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/franchise/{franchiseId}/top-stock-product")
+    public ResponseEntity<List<ProductStockResponse>> getTopStockProductByFranchise(@PathVariable Integer franchiseId) {
+        List<ProductStockResponse> response = branchRepository.findTopStockProductsByFranchise(franchiseId);
+
+        if (response.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
 }
